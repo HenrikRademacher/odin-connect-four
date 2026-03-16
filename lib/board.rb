@@ -2,7 +2,7 @@
 
 # Gameboard for Connect-Four
 class Board
-  attr_accessor :contents
+  attr_reader :contents, :game_won
 
   def initialize
     @contents = Array.new(7) { Array.new(6, '_') }
@@ -29,6 +29,7 @@ class Board
     row = 0
     row += 1 until cell_empty?(col, row)
     fill_cell(col, row, content)
+    investigate_status
   end
 
   def inbound?(col, row)
@@ -55,7 +56,15 @@ class Board
   end
 
   def deliver_printstring
-    lines[] = @contents.map { |line| line.join(' ') }
-    lines.join('\n')
+    lines = []
+    [5, 4, 3, 2, 1, 0].each do |i|
+      rows = []
+      [0, 1, 2, 3, 4, 5, 6].each do |ii|
+        rows << @contents[ii][i]
+      end
+      lines << rows.join(' ')
+    end
+    lines << '0 1 2 3 4 5 6'
+    lines
   end
 end
